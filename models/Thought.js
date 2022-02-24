@@ -22,13 +22,13 @@ const reactionSchema = new Schema(
   },
   {
     toJSON: {
-      virtuals: true,
+      getters: true,
     },
     id: false,
   }
 );
 //virtual property 'reactionCount'
-thoughtSchema.virtuals("reactionCount").get(function () {
+thoughtSchema.virtual("reactionCount").get(function () {
   return this.reaction.length;
 });
 
