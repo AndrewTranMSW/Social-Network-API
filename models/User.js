@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const Thought = require("./Thought");
 
 //Schema to create User model
 const userSchema = new Schema(
@@ -9,18 +10,19 @@ const userSchema = new Schema(
       unique: true,
       trim: true,
     },
+
     email: {
       type: String,
       required: true,
       unique: true,
       match: [/.+@.+\..+/, "Must match an email address!"],
     },
-    thoughts: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Thought",
-      },
-    ],
+
+    thoughts: {
+      type: Schema.Types.ObjectId,
+      ref: "Thought",
+    },
+
     friends: [
       {
         type: Schema.Types.ObjectId,

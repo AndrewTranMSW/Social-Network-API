@@ -10,21 +10,24 @@ const thoughtSchema = new Schema(
       minlength: 1,
       maxlength: 280,
     },
+
     createdAt: {
       type: Date,
       default: Date.now,
       //moment
       get: (timestamp) => moment(timestamp).format("MMM Do, YYYY [at] hh:mm a"),
     },
+
     username: {
       type: String,
       required: true,
     },
     reactions: [reactionSchema],
   },
+
   {
     toJSON: {
-      getters: true,
+      virtuals: true,
     },
     id: false,
   }
