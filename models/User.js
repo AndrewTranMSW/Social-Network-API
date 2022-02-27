@@ -1,28 +1,31 @@
 const { Schema, model } = require("mongoose");
 const Thought = require("./Thought");
 
-//Schema to create User model
+// Schema to create User model
 const userSchema = new Schema(
   {
     username: {
       type: String,
-      required: true,
       unique: true,
+      required: true,
       trim: true,
     },
-
     email: {
       type: String,
       required: true,
       unique: true,
-      match: [/.+@.+\..+/, "Must match an email address!"],
+      //regular expression to check if it's a valid email address
+      match: [
+        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+        "Please enter a valid email address",
+      ],
     },
-
-    thoughts: {
-      type: Schema.Types.ObjectId,
-      ref: "Thought",
-    },
-
+    thoughts: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Thought",
+      },
+    ],
     friends: [
       {
         type: Schema.Types.ObjectId,
@@ -38,13 +41,11 @@ const userSchema = new Schema(
   }
 );
 
-//Create a virtual property 'friendCount' that gets and sets user's friend count.
-
+// Create a virtual property `friendCount` that gets the amount of reactions per user
 userSchema.virtual("friendCount").get(function () {
   return this.friends.length;
 });
 
-//Initializes User model
 const User = model("User", userSchema);
 
 module.exports = User;

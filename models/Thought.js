@@ -1,40 +1,39 @@
 const { Schema, model } = require("mongoose");
 const moment = require("moment");
 const reactionSchema = require("./Reaction");
-
+// Schema to create Thought model
 const thoughtSchema = new Schema(
   {
     thoughtText: {
       type: String,
       required: true,
-      minlength: 1,
-      maxlength: 280,
+      minLength: 1,
+      maxLength: 280,
     },
 
     createdAt: {
       type: Date,
-      default: Date.now,
-      //moment
-      get: (timestamp) => moment(timestamp).format("MMM Do, YYYY [at] hh:mm a"),
+      default: Date.now(),
+      get: (createdAtVal) =>
+        moment(createdAtVal).format("MMM DD, YYYY [at] hh:mm a"),
     },
 
     username: {
-      type: String,
-      required: true,
+      type: Schema.Types.ObjectId,
+      ref: "User",
     },
     reactions: [reactionSchema],
   },
-
   {
     toJSON: {
       virtuals: true,
     },
-    id: false,
+    id: false, //don't return the id of the emlement(s)
   }
 );
-//virtual property 'reactionCount'
+// Create a virtual property `reactionCount` that gets the amount of reactions per thought
 thoughtSchema.virtual("reactionCount").get(function () {
-  return this.reaction.length;
+  return this.reactions.length;
 });
 
 const Thought = model("Thought", thoughtSchema);

@@ -1,6 +1,8 @@
-const { Schema, model } = require("mongoose");
+const { Schema, Types } = require("mongoose");
+//dependency
 const moment = require("moment");
 
+//Creates reaction schema
 const reactionSchema = new Schema(
   {
     reactionId: {
@@ -11,7 +13,7 @@ const reactionSchema = new Schema(
     reactionBody: {
       type: String,
       required: true,
-      maxlength: 280,
+      maxLength: 280,
     },
 
     username: {
@@ -19,11 +21,14 @@ const reactionSchema = new Schema(
       required: true,
     },
 
-    createdAt: {
-      type: Date,
-      default: Date.now,
-      get: (timestamp) => moment(timestamp).format("MMM do, YYY [at] hh:mm a"),
-    },
+    createdAt: [
+      {
+        type: Date,
+        default: Date.now(),
+        get: (createdAtVal) =>
+          moment(createdAtVal).format("MMM DD, YYYY [at] hh:mm a"),
+      },
+    ],
   },
   {
     toJSON: {
